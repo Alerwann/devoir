@@ -38,6 +38,7 @@ class CartSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["user", "unit_price", "price"]
 
+
 class OrderItemSerializer(serializers.ModelSerializer):
     """serializer de la commande"""
 
@@ -50,7 +51,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             "unit_price",
             "price",
         ]
-        read_only_fields= ["unit_price", "price"]
+        read_only_fields = ["unit_price", "price"]
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -62,12 +63,12 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             "id",
-            "user", 
-            "delivery_crew",  
-            "status",  
-            "total",  
-            "date", 
-            "items",  
+            "user",
+            "delivery_crew",
+            "status",
+            "total",
+            "date",
+            "items",
         ]
 
-        read_only_fields = ["user", "delivery_crew", "status", "total", "date"]
+        read_only_fields = ["user",  "total", "date"]

@@ -205,11 +205,14 @@ class OrderDetailsView(RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         user = self.request.user
+        data = self.request.data
         if user.groups.filter(name="Delivery crew").exists():
-            data = self.request.data
-            if set(data.keys()) > {"status"}:
+            forbidden_keys = set(data.keys()) - {"status"}
+            if forbidden_keys:
                 raise serializers.ValidationError(
-                    {"message": "Vous ne pouvez modifier que le statut de la commande."}
+                    {
+                        "message": f"Vous ne pouvez modifier que le statut de la commande. Champs interdits: {', '.join(forbidden_keys)}"
+                    }
                 )
 
             if "status" in data:
@@ -227,18 +230,18 @@ class OrderDetailsView(RetrieveUpdateDestroyAPIView):
                 )
 
         elif user.groups.filter(name="Manager").exists():
-            data = self.request.data
-            if set(data.keys()) > {"delivery_crew"}:
+            forbidden_keys = set(data.keys()) - {"delivery_crew"}
+            if forbidden_keys:
                 raise serializers.ValidationError(
                     {
-                        "message": "Le Manager ne peut modifier que l'équipe de livraison."
+                        "message": f"Le Manager ne peut modifier que l'équipe de livraison. Champs interdits: {', '.join(forbidden_keys)}"
                     }
                 )
 
-            serializer.save()
-            return
+            if "delivery_crew" in data:
+                serializer.save()
+                return
 
-        else:
-            raise serializers.ValidationError(
-                {"message": "Vous n'êtes pas autorisé à modifier cette commande."}
-            )
+        raise serializers.ValidationError(
+            {"message": "Vous n'êtes pas autorisé à modifier cette commande."}
+        )
