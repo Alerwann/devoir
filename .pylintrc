@@ -1,0 +1,6 @@
+[MASTER]
+load-plugins=pylint_django
+init-hook='import sys; sys.path.append("./Littlelemon")'
+
+[pylint_django]
+django-settings-module=Littlelemon.settings
