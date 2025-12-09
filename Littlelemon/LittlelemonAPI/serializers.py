@@ -1,7 +1,7 @@
 """Littlelemon/serializers.py (Créez ce fichier si vous ne l'avez pas)"""
 
 from rest_framework import serializers
-from .models import Category, MenuItem, Cart, Order
+from .models import Category, MenuItem, Cart, Order, OrderItem
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -42,8 +42,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
     """serializer de la commande"""
 
     class Meta:
-        model = Order
-        fiels = [
+        model = OrderItem
+        fields = [
             "id",
             "menuitem",
             "quantity",
